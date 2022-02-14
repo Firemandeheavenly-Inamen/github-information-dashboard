@@ -1,5 +1,6 @@
 import React from "react";
 import { useUserContext } from "../context/userContext";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const Authentication = () => {
 
@@ -7,7 +8,9 @@ const Authentication = () => {
 
   return (
     <div className="container">
-      <button onClick={signInWithGithub}> Login with GitHub </button>
+      <Router>
+     <Link to="/dashboard"><button onClick={signInWithGithub}> Login with GitHub </button></Link>
+      </Router>
     </div>
   );
 };
