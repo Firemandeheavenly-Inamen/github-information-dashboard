@@ -12,6 +12,18 @@
     margin-bottom: 18px;
   }
 
+  input {
+    padding: 12px;
+    margin: 12px;
+    margin-left: 0;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 4px #ccc;
+    border-radius: 6px;
+    font-size: 18px;
+    width: 93%;
+  }
+  
   .container {
     box-shadow: 0 1px 6px #ccc;
     border-radius: 6px;
@@ -43,4 +55,13 @@
     justify-content: center;
     min-height: 100vh;
     flex-direction: column;
+  }
+
+  .results-container {
+    margin-top: 10px;
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
