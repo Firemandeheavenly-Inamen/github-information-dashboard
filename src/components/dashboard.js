@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { useUserContext } from "../context/userContext";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import axios from "axios";
+import Pagination from "./Pagination";
 
 
 const Dashboard = () => {
@@ -9,6 +10,11 @@ const Dashboard = () => {
   const [username, setUsername] = useState('')
   const [loading, setLoading] = useState(false)
   const [organizations, setOrganizations] = useState([])
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(5);
+
+
 
   function handleSubmit(e){
     e.preventDefault()
@@ -28,18 +34,24 @@ const Dashboard = () => {
   }
   function renderOrganization(organization){
     return(
-      <div className="row" key={organization.id}>
-        <h2 className="organization-name">
+      <ul className='list-group mb-2' key={organization.id}>
+        <li  className='list-group-item'>
           {organization.login}
-        </h2>
-      </div>
+        </li>
+      </ul>
     )
   }
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = organizations.slice(indexOfFirstPost, indexOfLastPost);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+
   return (
     <div>
       <div className="">
       <div className="">
-      <div className="">
+      <div className="container mt-5">
       <input className="input"
       value={username}
       placeholder = 'Github Username'
@@ -48,10 +60,16 @@ const Dashboard = () => {
       <button className="button" onClick={handleSubmit}>{loading? "Searching..." : "Search"} </button>
       </div>
       <div className="results-container">
-        {organizations.map(renderOrganization)}
+        {currentPosts.map(renderOrganization)}
       </div>
       </div>
       </div>
+
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={organizations.length}
+        paginate={paginate}
+      />
 
       <Router>
       <Link to="/auth">
