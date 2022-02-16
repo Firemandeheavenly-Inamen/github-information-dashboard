@@ -63,3 +63,9 @@
     flex-direction: column;
     align-items: center;
   }
+  .organization-name{
+    color: white;
+    background-color:rgba(7, 135, 255, 0.952);
+    padding: 20px;
+  }
+  
