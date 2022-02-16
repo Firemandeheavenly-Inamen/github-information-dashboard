@@ -48,8 +48,8 @@ const Dashboard = () => {
   }
   function renderRepositories(repositories){
     return(
-        <li name='repository-name' className='list-group-item' key={repositories.id}>
-          <input type='button' value={repositories.name}  className="organization-name" />
+        <li name='repository-name' className='list-repositories' key={repositories.id}>
+          <input type='button' value={repositories.name}  className="repository-name" />
         </li>
     )
   }
@@ -58,7 +58,7 @@ const Dashboard = () => {
     return (
       <li
         name="organization-name"
-        className="list-group-item"
+        className="list-organization"
         key={organization.id}
       >
         <input
@@ -82,6 +82,7 @@ const Dashboard = () => {
   const paginateRepositories = (pageNumber) => setCurrentRepositoryPage(pageNumber);
 
   return (
+    <>
     <div>
       <div className="">
         <div className="container mt-5">
@@ -96,7 +97,7 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="results-container">
-          <ul className="list-group mb-2">
+          <ul>
             {currentPosts.map(renderOrganization)}
           </ul>
         </div>
@@ -108,7 +109,7 @@ const Dashboard = () => {
         paginate={paginate}
       />
        <div className="results-container">
-          <ul className="list-group mb-2">
+          <ul>
             {currentRepositoryPosts.map(renderRepositories)}
           </ul>
         </div>
@@ -118,12 +119,13 @@ const Dashboard = () => {
         paginate={paginateRepositories}
       />
 
+      </div>
       <Router>
-        <Link to="/auth">
-          <button onClick={logoutUser}>Log out</button>
-        </Link>
-      </Router>
-    </div>
+      <Link to="/auth">
+        <button id="logout" onClick={logoutUser}>Log out</button>
+      </Link>
+    </Router>
+    </>
   );
 };
 
