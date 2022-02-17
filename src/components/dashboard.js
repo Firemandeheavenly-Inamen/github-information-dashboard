@@ -6,10 +6,13 @@ import Pagination from "./Pagination";
 
 const Dashboard = () => {
    const [repositories, setRepositories] = useState([])
-  let { logoutUser } = useUserContext();
-  const [username, setUsername] = useState("");
+  const { user, logoutUser } = useUserContext();
+  const [username, setUsername] = useState(user.reloadUserInfo.screenName);
   const [loading, setLoading] = useState(false);
   const [organizations, setOrganizations] = useState([]);
+  const [organizationName, setOrganizationName] = useState('')
+  const [collaborators, setCollaborators] = useState([])
+  const [OpenPullRequests, setOpenPullRequests] = useState([])
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(4);
@@ -30,12 +33,14 @@ const Dashboard = () => {
     }).then((res) => {
       setLoading(false);
       setOrganizations(res.data);
-      console.log(res.data);
-      console.log(res);
+      // console.log(res.data);
+      // console.log(res);
     });
     setRepositories([])
+    setCollaborators([])
+    setOpenPullRequests([])
   }
-  function getRepos(event) {
+  function getRepositories(event) {
     let name = event.target.value;
     console.log(name);
     axios({
@@ -43,12 +48,67 @@ const Dashboard = () => {
       url: `https://api.github.com/users/${name}/repos`,
     }).then((res) => {
       setRepositories(res.data);
+      setOrganizationName(name)
       console.log(res.data);
+      console.log(res)
     });  
   }
+
+  // function getCollaborators(event) {
+  //   let name = event.target.value;
+  //   console.log(name);
+  //   axios({
+  //     method: "get",
+  //     url: `https://api.github.com/repos/${organizationName}/${name}/contributors`,
+  //   }).then((res) => {
+  //     setCollaborators(res.data)
+  //     console.log(res.data);
+  //     setRepositoryName(name)
+  //     });
+  // }
+
+  function renderCollaborators(collaborators){
+    return(
+        <li name='repository-name' className='list-repositories' key={collaborators.id}>
+          <p>{collaborators.login}</p>
+        </li>
+    )
+  }
+
+  // function getOpenPullRequests(event) {
+  //   let name = event.target.value;
+  //   console.log(name);
+  //   axios({
+  //     method: "get",
+  //     url: `https://api.github.com/repos/${organizationName}/${repositoryName}/pulls`,
+  //   }).then((res) => {
+  //     setOpenPullRequests(res.data)
+  //     console.log(res.data);
+  //     // console.log(res)
+  //   });
+  // }  
+
+  async function handleRepositoryClick(event){
+    let name = event.target.value;
+    const getCollaborators = axios.get(`https://api.github.com/repos/${organizationName}/${name}/contributors`);
+    const getOpenPullRequests = axios.get(`https://api.github.com/repos/${organizationName}/${name}/pulls`);
+    await axios.all([getCollaborators, getOpenPullRequests]).then(axios.spread(function(res1, res2) {
+      setCollaborators(res1.data)
+      setOpenPullRequests(res2.data)
+    }));
+     }
+
+  function renderOpenPullRequests(openPulls){
+    return(
+        <li name='repository-name' className='list-repositories' key={openPulls.id}>
+          <p>{openPulls.title}</p>
+        </li>
+    )
+  }
+
   function renderRepositories(repositories){
     return(
-        <li name='repository-name' className='list-repositories' key={repositories.id}>
+        <li onClick={handleRepositoryClick} name='repository-name' className='list-repositories' key={repositories.id}>
           <input type='button' value={repositories.name}  className="repository-name" />
         </li>
     )
@@ -64,7 +124,7 @@ const Dashboard = () => {
         <input
           type="button"
           value={organization.login}
-          onClick={getRepos}
+          onClick={getRepositories}
           className="organization-name"
         />
       </li>
@@ -97,6 +157,7 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="results-container">
+        <h2>Organizations</h2>
           <ul>
             {currentPosts.map(renderOrganization)}
           </ul>
@@ -109,6 +170,7 @@ const Dashboard = () => {
         paginate={paginate}
       />
        <div className="results-container">
+       <h2>Repositories</h2>
           <ul>
             {currentRepositoryPosts.map(renderRepositories)}
           </ul>
@@ -119,6 +181,20 @@ const Dashboard = () => {
         paginate={paginateRepositories}
       />
 
+<div className="results-container">
+       <h2>Collaborators</h2>
+          <ul>
+            {collaborators.map(renderCollaborators)}
+          </ul>
+        </div>
+
+  <div className="results-container">
+       <h2>OpenPullRequests</h2>
+          <ul>
+            {OpenPullRequests.map(renderOpenPullRequests)}
+          </ul>
+        </div>
+       
       </div>
       <Router>
       <Link to="/auth">
