@@ -22,6 +22,9 @@ const Dashboard = () => {
   const [currentRepositoryPage, setCurrentRepositoryPage] = useState(1);
   const [postsPerRepositoryPage] = useState(10);
 
+  let contributors = []
+  let contributions = []
+
   useEffect(() => {
     clearRepositoryFields();
   }, [organizationName]);
@@ -30,6 +33,10 @@ const Dashboard = () => {
     e.preventDefault();
     searchOrganizations();
   }
+
+  useEffect(()=>{
+    getCommitsInfo()
+  },[collaborators])
 
   function clearRepositoryFields() {
     setCollaborators([]);
@@ -54,7 +61,6 @@ const Dashboard = () => {
   }
   function getRepositories(event) {
     let name = event.target.value;
-    console.log(name);
     axios({
       method: "get",
       url: `https://api.github.com/users/${name}/repos?page=1&per_page=1000`,
@@ -124,6 +130,19 @@ const Dashboard = () => {
     );
   }
 
+function getCommitsInfo(){
+  if(collaborators.length !== 0){
+for(let i=0; i<collaborators.length; i++){
+  contributors.push([collaborators[i].login])
+  contributions.push(collaborators[i].contributions)
+}
+console.log(contributors)
+console.log(contributions)
+  } else{
+    return
+  }
+}
+
   function renderOpenPullRequests(openPulls) {
     return (
       <li className="list-repositories" key={openPulls.id}>
@@ -142,7 +161,7 @@ const Dashboard = () => {
 
   function renderActiveBranches(activeBranches) {
     return (
-      <li className="list-repositories" key={activeBranches.id}>
+      <li className="list-repositories" key={activeBranches.commit.url}>
         <p>{activeBranches.name}</p>
       </li>
     );
