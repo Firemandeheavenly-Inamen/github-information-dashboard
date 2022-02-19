@@ -3,6 +3,9 @@ import { useUserContext } from "../context/userContext";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import axios from "axios";
 import Pagination from "./Pagination";
+import { Pie } from "react-chartjs-2";
+import {Chart, ArcElement} from 'chart.js'
+Chart.register(ArcElement);
 
 const Dashboard = () => {
   const [repositories, setRepositories] = useState([]);
@@ -22,8 +25,8 @@ const Dashboard = () => {
   const [currentRepositoryPage, setCurrentRepositoryPage] = useState(1);
   const [postsPerRepositoryPage] = useState(10);
 
-  let contributors = []
-  let contributions = []
+  let contributors = [];
+  let contributions = [];
 
   useEffect(() => {
     clearRepositoryFields();
@@ -34,9 +37,10 @@ const Dashboard = () => {
     searchOrganizations();
   }
 
-  useEffect(()=>{
-    getCommitsInfo()
-  },[collaborators])
+  useEffect(() => {
+    getCommitsInfo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collaborators]);
 
   function clearRepositoryFields() {
     setCollaborators([]);
@@ -58,6 +62,7 @@ const Dashboard = () => {
     setCollaborators([]);
     setOpenPullRequests([]);
     setClosedPullRequests([]);
+    setActiveBranches([]);
   }
   function getRepositories(event) {
     let name = event.target.value;
@@ -111,13 +116,18 @@ const Dashboard = () => {
       `https://api.github.com/repos/${organizationName}/${name}/branches?page=1&per_page=1000`
     );
     await axios
-      .all([getCollaborators, getOpenPullRequests, getClosedPullRequests, getActiveBranches])
+      .all([
+        getCollaborators,
+        getOpenPullRequests,
+        getClosedPullRequests,
+        getActiveBranches,
+      ])
       .then(
         axios.spread(function (res1, res2, res3, res4) {
           setCollaborators(res1.data);
           setOpenPullRequests(res2.data);
           setClosedPullRequests(res3.data);
-          setActiveBranches(res4.data)
+          setActiveBranches(res4.data);
         })
       );
   }
@@ -130,18 +140,18 @@ const Dashboard = () => {
     );
   }
 
-function getCommitsInfo(){
-  if(collaborators.length !== 0){
-for(let i=0; i<collaborators.length; i++){
-  contributors.push([collaborators[i].login])
-  contributions.push(collaborators[i].contributions)
-}
-console.log(contributors)
-console.log(contributions)
-  } else{
-    return
+  function getCommitsInfo() {
+    if (collaborators.length !== 0) {
+      for (let i = 0; i < collaborators.length; i++) {
+        contributors.push([collaborators[i].login]);
+        contributions.push(collaborators[i].contributions);
+      }
+      console.log(contributors);
+      console.log(contributions);
+    } else {
+      return;
+    }
   }
-}
 
   function renderOpenPullRequests(openPulls) {
     return (
@@ -216,6 +226,30 @@ console.log(contributions)
   const paginateRepositories = (pageNumber) =>
     setCurrentRepositoryPage(pageNumber);
 
+  const state = {
+    labels: ["January", "February", "March", "April", "May"],
+    datasets: [
+      {
+        label: "Rainfall",
+        backgroundColor: [
+          "#B21F00",
+          "#C9DE00",
+          "#2FDE00",
+          "#00A6B4",
+          "#6800B4",
+        ],
+        hoverBackgroundColor: [
+          "#501800",
+          "#4B5000",
+          "#175000",
+          "#003350",
+          "#35014F",
+        ],
+        data: [65, 59, 80, 81, 56],
+      },
+    ],
+  };
+
   return (
     <>
       <div>
@@ -272,7 +306,25 @@ console.log(contributions)
           <h2>Closed Pull Requests</h2>
           <ul>{closedPullRequests.map(renderClosedPullRequests)}</ul>
         </div>
+
+        <div>
+          <Pie
+            data={state}
+            options={{
+              title: {
+                display: true,
+                text: "Average Rainfall per month",
+                fontSize: 20,
+              },
+              legend: {
+                display: true,
+                position: "right",
+              },
+            }}
+          />
+        </div>
       </div>
+
       <Router>
         <Link to="/auth">
           <button id="logout" onClick={logoutUser}>
