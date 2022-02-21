@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "../context/userContext";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import axios from "axios";
 import Pagination from "./Pagination";
+import PieChart from "./PieChart";
 
 const Dashboard = () => {
   const [repositories, setRepositories] = useState([]);
@@ -15,12 +17,24 @@ const Dashboard = () => {
   const [openPullRequests, setOpenPullRequests] = useState([]);
   const [closedPullRequests, setClosedPullRequests] = useState([]);
   const [activeBranches, setActiveBranches] = useState([]);
+  const [userData, setUserData] = useState({});
+  let comparativeContributors= []
+  let comparativeContributions= []
+  let personalContributor=""
+  let personalContribution=""
+  let highestContributor= ""
+  let highestContribution= ""
+  
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(4);
 
   const [currentRepositoryPage, setCurrentRepositoryPage] = useState(1);
   const [postsPerRepositoryPage] = useState(10);
+
+  let contributors = [];
+  let contributions = [];
 
   useEffect(() => {
     clearRepositoryFields();
@@ -30,6 +44,41 @@ const Dashboard = () => {
     e.preventDefault();
     searchOrganizations();
   }
+
+  useEffect(() => {
+    getCommitsInfo();
+  }, [collaborators]);
+
+  useEffect(() => {
+    if (collaborators.length> 0) {
+    highestContribution = Math.max(...contributions);
+      highestContributor =
+        contributors[contributions.indexOf(highestContribution)];
+        personalContributor= username
+      personalContribution = contributions[contributors.indexOf(username)]
+      console.log(contributors)
+      console.log(username)
+      console.log(contributors.indexOf(username))
+       comparativeContributors= [personalContributor, highestContributor]
+      comparativeContributions= [personalContribution, highestContribution]
+    }
+      setUserData({
+        labels: comparativeContributors,
+        datasets: [
+          {
+            data: comparativeContributions,
+            backgroundColor: [
+              "#e1adef",
+              "#50AF95",
+              ],
+            borderColor: "black",
+            borderWidth: 2,
+          },
+        ],
+      })
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collaborators,username]);
 
   function clearRepositoryFields() {
     setCollaborators([]);
@@ -51,10 +100,10 @@ const Dashboard = () => {
     setCollaborators([]);
     setOpenPullRequests([]);
     setClosedPullRequests([]);
+    setActiveBranches([]);
   }
   function getRepositories(event) {
     let name = event.target.value;
-    console.log(name);
     axios({
       method: "get",
       url: `https://api.github.com/users/${name}/repos?page=1&per_page=1000`,
@@ -105,13 +154,18 @@ const Dashboard = () => {
       `https://api.github.com/repos/${organizationName}/${name}/branches?page=1&per_page=1000`
     );
     await axios
-      .all([getCollaborators, getOpenPullRequests, getClosedPullRequests, getActiveBranches])
+      .all([
+        getCollaborators,
+        getOpenPullRequests,
+        getClosedPullRequests,
+        getActiveBranches,
+      ])
       .then(
         axios.spread(function (res1, res2, res3, res4) {
           setCollaborators(res1.data);
           setOpenPullRequests(res2.data);
           setClosedPullRequests(res3.data);
-          setActiveBranches(res4.data)
+          setActiveBranches(res4.data);
         })
       );
   }
@@ -122,6 +176,19 @@ const Dashboard = () => {
         <p>{collaborators.login}</p>
       </li>
     );
+  }
+
+  function getCommitsInfo() {
+    if (collaborators.length !== 0) {
+      for (let i = 0; i < collaborators.length; i++) {
+        contributors.push(collaborators[i].login);
+        contributions.push(collaborators[i].contributions);
+      }
+      console.log(contributors);
+      console.log(contributions);
+    } else {
+      return;
+    }
   }
 
   function renderOpenPullRequests(openPulls) {
@@ -142,7 +209,7 @@ const Dashboard = () => {
 
   function renderActiveBranches(activeBranches) {
     return (
-      <li className="list-repositories" key={activeBranches.id}>
+      <li className="list-repositories" key={activeBranches.commit.url}>
         <p>{activeBranches.name}</p>
       </li>
     );
@@ -196,6 +263,21 @@ const Dashboard = () => {
   );
   const paginateRepositories = (pageNumber) =>
     setCurrentRepositoryPage(pageNumber);
+
+  const options = {
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom",
+      },
+      title: {
+        text: "Comparison with highest contributor",
+        display: true,
+        fontSize: "200px",
+      },
+    },
+  };
+
 
   return (
     <>
@@ -253,7 +335,13 @@ const Dashboard = () => {
           <h2>Closed Pull Requests</h2>
           <ul>{closedPullRequests.map(renderClosedPullRequests)}</ul>
         </div>
+
+  {  collaborators.length>1&&<div id='pie-chart'>
+ <PieChart chartData={userData} chartOptions={options} />
+        </div>}
+
       </div>
+
       <Router>
         <Link to="/auth">
           <button id="logout" onClick={logoutUser}>

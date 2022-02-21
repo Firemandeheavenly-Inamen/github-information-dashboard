@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const Authentication = () => {
 
-  const { signInWithGithub } = useUserContext();
+  const {signInWithGithub } = useUserContext();
 
   return (
     <div className="container">
