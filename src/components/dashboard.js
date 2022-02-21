@@ -1,11 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "../context/userContext";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import axios from "axios";
 import Pagination from "./Pagination";
-import { Pie } from "react-chartjs-2";
-import {Chart, ArcElement} from 'chart.js'
-Chart.register(ArcElement);
+import PieChart from "./PieChart";
 
 const Dashboard = () => {
   const [repositories, setRepositories] = useState([]);
@@ -18,6 +17,15 @@ const Dashboard = () => {
   const [openPullRequests, setOpenPullRequests] = useState([]);
   const [closedPullRequests, setClosedPullRequests] = useState([]);
   const [activeBranches, setActiveBranches] = useState([]);
+  const [userData, setUserData] = useState({});
+  let comparativeContributors= []
+  let comparativeContributions= []
+  let personalContributor=""
+  let personalContribution=""
+  let highestContributor= ""
+  let highestContribution= ""
+  
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(4);
@@ -39,8 +47,38 @@ const Dashboard = () => {
 
   useEffect(() => {
     getCommitsInfo();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaborators]);
+
+  useEffect(() => {
+    if (collaborators.length> 0) {
+    highestContribution = Math.max(...contributions);
+      highestContributor =
+        contributors[contributions.indexOf(highestContribution)];
+        personalContributor= username
+      personalContribution = contributions[contributors.indexOf(username)]
+      console.log(contributors)
+      console.log(username)
+      console.log(contributors.indexOf(username))
+       comparativeContributors= [personalContributor, highestContributor]
+      comparativeContributions= [personalContribution, highestContribution]
+    }
+      setUserData({
+        labels: comparativeContributors,
+        datasets: [
+          {
+            data: comparativeContributions,
+            backgroundColor: [
+              "#e1adef",
+              "#50AF95",
+              ],
+            borderColor: "black",
+            borderWidth: 2,
+          },
+        ],
+      })
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collaborators,username]);
 
   function clearRepositoryFields() {
     setCollaborators([]);
@@ -143,7 +181,7 @@ const Dashboard = () => {
   function getCommitsInfo() {
     if (collaborators.length !== 0) {
       for (let i = 0; i < collaborators.length; i++) {
-        contributors.push([collaborators[i].login]);
+        contributors.push(collaborators[i].login);
         contributions.push(collaborators[i].contributions);
       }
       console.log(contributors);
@@ -226,29 +264,20 @@ const Dashboard = () => {
   const paginateRepositories = (pageNumber) =>
     setCurrentRepositoryPage(pageNumber);
 
-  const state = {
-    labels: ["January", "February", "March", "April", "May"],
-    datasets: [
-      {
-        label: "Rainfall",
-        backgroundColor: [
-          "#B21F00",
-          "#C9DE00",
-          "#2FDE00",
-          "#00A6B4",
-          "#6800B4",
-        ],
-        hoverBackgroundColor: [
-          "#501800",
-          "#4B5000",
-          "#175000",
-          "#003350",
-          "#35014F",
-        ],
-        data: [65, 59, 80, 81, 56],
+  const options = {
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom",
       },
-    ],
+      title: {
+        text: "Comparison with highest contributor",
+        display: true,
+        fontSize: "200px",
+      },
+    },
   };
+
 
   return (
     <>
@@ -307,22 +336,10 @@ const Dashboard = () => {
           <ul>{closedPullRequests.map(renderClosedPullRequests)}</ul>
         </div>
 
-        <div>
-          <Pie
-            data={state}
-            options={{
-              title: {
-                display: true,
-                text: "Average Rainfall per month",
-                fontSize: 20,
-              },
-              legend: {
-                display: true,
-                position: "right",
-              },
-            }}
-          />
-        </div>
+  {  collaborators.length>1&&<div id='pie-chart'>
+ <PieChart chartData={userData} chartOptions={options} />
+        </div>}
+
       </div>
 
       <Router>
