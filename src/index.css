@@ -82,9 +82,19 @@ margin-right: 30px;
 #logout{
   min-width: 200px;
 }
-
 #pie-chart{
   max-width: 320px;
   max-height: 320px;
+  margin: 0 auto;
+}
+.page-item{
+  margin: 0 auto;
+}
+a.page-link{
+margin: 0 auto;
+}
+
+ul.pagination{
+  max-width: 350px;
   margin: 0 auto;
 }

@@ -36,6 +36,15 @@ const Dashboard = () => {
   let contributors = [];
   let contributions = [];
 
+  useEffect(()=>{
+    axios({
+      method: "get",
+      url: `https://api.github.com/users/${username}/orgs`,
+    }).then((res) => {
+      setOrganizations(res.data);
+    });
+  },[])
+
   useEffect(() => {
     clearRepositoryFields();
   }, [organizationName]);
@@ -68,8 +77,8 @@ const Dashboard = () => {
           {
             data: comparativeContributions,
             backgroundColor: [
-              "#e1adef",
-              "#50AF95",
+              "rgba(7, 135, 255, 0.952)",
+               "#50AF95",
               ],
             borderColor: "black",
             borderWidth: 2,
@@ -77,7 +86,6 @@ const Dashboard = () => {
         ],
       })
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaborators,username]);
 
   function clearRepositoryFields() {
@@ -95,7 +103,9 @@ const Dashboard = () => {
     }).then((res) => {
       setLoading(false);
       setOrganizations(res.data);
-    });
+    }).catch(
+      err => setLoading(false)
+    );
     setRepositories([]);
     setCollaborators([]);
     setOpenPullRequests([]);
@@ -336,7 +346,7 @@ const Dashboard = () => {
           <ul>{closedPullRequests.map(renderClosedPullRequests)}</ul>
         </div>
 
-  {  collaborators.length>1&&<div id='pie-chart'>
+  {  collaborators.length>0 &&<div id='pie-chart'>
  <PieChart chartData={userData} chartOptions={options} />
         </div>}
 
