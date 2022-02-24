@@ -25,14 +25,16 @@ width: 100%;
 }
 
 .container {
-box-shadow: 0 1px 6px #ccc;
+box-shadow: 0 1px 6px rgb(2, 13, 78);
 border-radius: 6px;
 display: flex;
+/* height: auto; */
 align-items: center;
 justify-content: center;
 flex-direction: column;
 width: 400px;
 padding: 22px;
+margin-bottom: 50px;
 }
 
 button {
@@ -41,7 +43,7 @@ border: none;
 color: white;
 padding: 12px;
 margin: 12px 0;
-box-shadow: 0 1px 6px #ccc;
+box-shadow: 0 1px 6px rgb(221, 221, 221);
 width: 100%;
 border-radius: 6px;
 font-size: 18px;
@@ -64,10 +66,17 @@ flex-direction: column;
 align-items: center;
 }
 
-.organization-name, .repository-name{
-color: white;
-background-color:rgba(7, 135, 255, 0.952);
-padding: 20px;
+.organization-name{
+color:#0B070A;
+font-size: 20px;
+background-color: #2DABFA;
+padding: 18px;
+}
+.repository-name{
+  color: #1B400F;
+  background-color: #bcd5e4;
+  font-size: 20px;
+  padding: 13px;
 }
 
 .list-organization, .list-repositories{
@@ -77,6 +86,19 @@ align-content: flex-start;
 justify-content: flex-start;
 align-items: flex-start;
 margin-right: 30px;
+}
+
+.list{
+  list-style: none;
+display: inline-block;
+align-content: flex-start;
+justify-content: flex-start;
+align-items: flex-start;
+margin-right: 30px;
+}
+
+ul{
+  max-width: 900px;
 }
 
 #logout{
@@ -97,4 +119,5 @@ margin: 0 auto;
 ul.pagination{
   max-width: 350px;
   margin: 0 auto;
+  margin-bottom: 20px;
 }
