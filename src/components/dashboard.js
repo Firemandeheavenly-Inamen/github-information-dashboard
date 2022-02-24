@@ -77,10 +77,10 @@ const Dashboard = () => {
           {
             data: comparativeContributions,
             backgroundColor: [
-              "rgba(7, 135, 255, 0.952)",
-               "#50AF95",
+              "#1E97E3",
+               "#bcd5e4",
               ],
-            borderColor: "black",
+            borderColor: "#1B400F",
             borderWidth: 2,
           },
         ],
@@ -182,8 +182,8 @@ const Dashboard = () => {
 
   function renderCollaborators(collaborators) {
     return (
-      <li className="list-repositories" key={collaborators.id}>
-        <p>{collaborators.login}</p>
+      <li className="list" key={collaborators.id}>
+        <p>| {collaborators.login} |</p>
       </li>
     );
   }
@@ -203,7 +203,7 @@ const Dashboard = () => {
 
   function renderOpenPullRequests(openPulls) {
     return (
-      <li className="list-repositories" key={openPulls.id}>
+      <li className="list" key={openPulls.id}>
         <p>{openPulls.title}</p>
       </li>
     );
@@ -211,7 +211,7 @@ const Dashboard = () => {
 
   function renderClosedPullRequests(closedPulls) {
     return (
-      <li className="list-repositories" key={closedPulls.id}>
+      <li className="list" key={closedPulls.id}>
         <p>{closedPulls.title}</p>
       </li>
     );
@@ -219,7 +219,7 @@ const Dashboard = () => {
 
   function renderActiveBranches(activeBranches) {
     return (
-      <li className="list-repositories" key={activeBranches.commit.url}>
+      <li className="list" key={activeBranches.commit.url}>
         <p>{activeBranches.name}</p>
       </li>
     );
