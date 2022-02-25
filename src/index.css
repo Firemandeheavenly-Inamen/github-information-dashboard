@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
+
+p{
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+}
+
 body{
   box-sizing: border-box;
 }
@@ -28,13 +35,19 @@ width: 100%;
 box-shadow: 0 1px 6px rgb(2, 13, 78);
 border-radius: 6px;
 display: flex;
-/* height: auto; */
+height: auto;
 align-items: center;
 justify-content: center;
 flex-direction: column;
 width: 400px;
 padding: 22px;
 margin-bottom: 50px;
+}
+
+@media (max-width: 450px){
+  .container{
+    width: 320px;
+  }
 }
 
 button {
