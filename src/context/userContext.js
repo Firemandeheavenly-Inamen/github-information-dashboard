@@ -36,7 +36,7 @@ export const UserContextProvider = ({ children }) => {
     setLoading(true);
     setError("");
     signInWithPopup(auth, new GithubAuthProvider())
-      .then((res) => console.log(res))
+      .then((res) => {})
       .catch((err) => setError(err.code))
       .finally(() => setLoading(false));
   };

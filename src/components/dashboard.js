@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useUserContext } from "../context/userContext";
+import { useUserContext} from "../context/userContext";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import axios from "axios";
 import Pagination from "./Pagination";
@@ -65,9 +65,6 @@ const Dashboard = () => {
         contributors[contributions.indexOf(highestContribution)];
         personalContributor= username
       personalContribution = contributions[contributors.indexOf(username)]
-      console.log(contributors)
-      console.log(username)
-      console.log(contributors.indexOf(username))
        comparativeContributors= [personalContributor, highestContributor]
       comparativeContributions= [personalContribution, highestContribution]
     }
@@ -104,7 +101,9 @@ const Dashboard = () => {
       setLoading(false);
       setOrganizations(res.data);
     }).catch(
-      err => setLoading(false)
+      err =>{ 
+        setLoading(false)
+      }
     );
     setRepositories([]);
     setCollaborators([]);
@@ -122,32 +121,6 @@ const Dashboard = () => {
       setOrganizationName(name);
     });
   }
-
-  // function getCollaborators(event) {
-  //   let name = event.target.value;
-  //   console.log(name);
-  //   axios({
-  //     method: "get",
-  //     url: `https://api.github.com/repos/${organizationName}/${name}/contributors`,
-  //   }).then((res) => {
-  //     setCollaborators(res.data)
-  //     console.log(res.data);
-  //     setRepositoryName(name)
-  //     });
-  // }
-
-  // function getOpenPullRequests(event) {
-  //   let name = event.target.value;
-  //   console.log(name);
-  //   axios({
-  //     method: "get",
-  //     url: `https://api.github.com/repos/${organizationName}/${repositoryName}/pulls`,
-  //   }).then((res) => {
-  //     setOpenPullRequests(res.data)
-  //     console.log(res.data);
-  //     // console.log(res)
-  //   });
-  // }
 
   async function handleRepositoryClick(event) {
     let name = event.target.value;
@@ -183,7 +156,7 @@ const Dashboard = () => {
   function renderCollaborators(collaborators) {
     return (
       <li className="list" key={collaborators.id}>
-        <p>| {collaborators.login} |</p>
+        <p>|| {collaborators.login} ||</p>
       </li>
     );
   }
@@ -194,8 +167,6 @@ const Dashboard = () => {
         contributors.push(collaborators[i].login);
         contributions.push(collaborators[i].contributions);
       }
-      console.log(contributors);
-      console.log(contributions);
     } else {
       return;
     }
@@ -204,7 +175,7 @@ const Dashboard = () => {
   function renderOpenPullRequests(openPulls) {
     return (
       <li className="list" key={openPulls.id}>
-        <p>{openPulls.title}</p>
+        <p>|| {openPulls.title} ||</p>
       </li>
     );
   }
@@ -212,7 +183,7 @@ const Dashboard = () => {
   function renderClosedPullRequests(closedPulls) {
     return (
       <li className="list" key={closedPulls.id}>
-        <p>{closedPulls.title}</p>
+        <p>|| {closedPulls.title} ||</p>
       </li>
     );
   }
@@ -220,7 +191,7 @@ const Dashboard = () => {
   function renderActiveBranches(activeBranches) {
     return (
       <li className="list" key={activeBranches.commit.url}>
-        <p>{activeBranches.name}</p>
+        <p>|| {activeBranches.name} ||</p>
       </li>
     );
   }
@@ -292,7 +263,6 @@ const Dashboard = () => {
   return (
     <>
       <div>
-        <div className="">
           <div className="container mt-5">
             <input
               className="input"
@@ -309,7 +279,6 @@ const Dashboard = () => {
             <h2>Organizations</h2>
             <ul>{currentPosts.map(renderOrganization)}</ul>
           </div>
-        </div>
 
         <Pagination
           postsPerPage={postsPerPage}
