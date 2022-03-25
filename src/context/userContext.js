@@ -48,7 +48,7 @@ export const UserContextProvider = ({ children }) => {
   const contextValue = {
     user,
     loading,
-    error,
+    error, setError,
     logoutUser,
      signInWithGithub,
   };
