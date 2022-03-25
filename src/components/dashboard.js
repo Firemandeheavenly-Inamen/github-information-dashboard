@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [username, setUsername] = useState(user.reloadUserInfo.screenName);
   const [loading, setLoading] = useState(false);
   const [organizations, setOrganizations] = useState([]);
-  const [organizationName, setOrganizationName] = useState("");
+  const [organizationName, setOrganizationName] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
   const [openPullRequests, setOpenPullRequests] = useState([]);
   const [closedPullRequests, setClosedPullRequests] = useState([]);
@@ -59,17 +59,17 @@ const Dashboard = () => {
             lastCommit.getDate();
           var d1 = new Date(date);
           var d2 = new Date(lastCommitDate);
-          const diff = Math.abs(d1 - d2);
-          const days = diff / (1000 * 3600 * 24);
-          if (days < 120) {
+          const difference = Math.abs(d1 - d2);
+          const days = difference / (1000 * 3600 * 24);
+          if (days < 95) {
             realActiveBranches.push(branch);
-            realActiveBranches.sort((a, b) => a.name.localeCompare(b.name))
+            realActiveBranches.sort((a, b) => a.name.localeCompare(b.name));
             setFinalActiveBranches([...realActiveBranches]);
           }
         });
       });
     }
-  }, [allBranches,repositories]);
+  }, [allBranches]);
 
   useEffect(() => {
     axios({
@@ -109,7 +109,7 @@ const Dashboard = () => {
         {
           data: comparativeContributions,
           backgroundColor: ["#00B6BD", "#BBFFF6"],
-          hoverBackgroundColor: ['#74C5F7', '#0CE0F5'],
+          hoverBackgroundColor: ["#74C5F7", "#0CE0F5"],
           borderColor: "#1B400F",
           borderWidth: 2,
         },
@@ -126,6 +126,8 @@ const Dashboard = () => {
   }
 
   function searchOrganizations() {
+    setAllBranches([]);
+    setFinalActiveBranches([]);
     setLoading(true);
     axios({
       method: "get",
@@ -156,7 +158,8 @@ const Dashboard = () => {
   }
 
   async function handleRepositoryClick(event) {
-    setFinalActiveBranches([])
+    setAllBranches([]);
+    setFinalActiveBranches([]);
     let name = event.target.value;
     const getCollaborators = axios.get(
       `https://api.github.com/repos/${organizationName}/${name}/contributors?page=1&per_page=1000`
@@ -284,9 +287,9 @@ const Dashboard = () => {
       legend: {
         labels: {
           font: {
-              size: 14
-          }
-      },
+            size: 14,
+          },
+        },
         display: true,
         position: "bottom",
       },
@@ -295,13 +298,20 @@ const Dashboard = () => {
 
   return (
     <>
-      <div>
+      <div id="dashboard">
+      <h1 className='text-primary mb-3'>Github Information Dashboard</h1>
+
         <div className="container mt-5">
           <input
             className="input"
             value={username}
             placeholder="Github Username"
             onChange={(e) => setUsername(e.target.value)}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                searchOrganizations();
+              }
+            }}
           />
           <button className="button" onClick={handleSubmit}>
             {loading ? "Searching..." : "Search"}
@@ -349,18 +359,18 @@ const Dashboard = () => {
         </div>
 
         <div className="results-container">
-        <h2>Comparison Chart</h2>
-        {collaborators.length > 0 && (
-          <div id="pie-chart">
-            <PieChart chartData={userData} chartOptions={options} />
-          </div>
-        )}
-      </div>
+          <h2>Comparison Chart</h2>
+          {collaborators.length > 0 && (
+            <div id="pie-chart">
+              <PieChart chartData={userData} chartOptions={options} />
+            </div>
+          )}
+        </div>
       </div>
 
       <Router>
         <Link to="/auth">
-          <button id="logout" onClick={logoutUser}>
+          <button className="button" id="logout" onClick={logoutUser}>
             Log out
           </button>
         </Link>
