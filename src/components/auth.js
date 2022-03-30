@@ -8,7 +8,7 @@ const Authentication = () => {
 
   return (
     <div className="landing-page">
-      <h1>
+      <h1 id='main-heading'>
         <span id="GitHub">GitHub</span>
         <br />
         <span id='h1Down'>
@@ -22,16 +22,14 @@ const Authentication = () => {
       </p>
       <div className="inner-image">
         <Router>
-          <Link to="/dashboard">
-            <a id="login-button" href onClick={signInWithGithub}>
+          <Link to="/dashboard" id="login-button" onClick={signInWithGithub}>
               <img src={login} alt='Login'/>
               <span>Login</span>
-            </a>
           </Link>
         </Router>
       </div>
       {loading && (<h2 style={{color:'white',marginTop:'-9rem'}}>Loading...</h2>)}
-      {error && <p style={{marginTop: '-4.5rem', marginLeft:'27rem', fontSize: '1.3rem'}} className="error">{error}</p>}
+      {error && <p className="error">{error}</p>}
 
     </div>
   );

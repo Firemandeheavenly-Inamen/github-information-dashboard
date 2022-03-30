@@ -61,7 +61,7 @@ const Dashboard = () => {
           var d2 = new Date(lastCommitDate);
           const difference = Math.abs(d1 - d2);
           const days = difference / (1000 * 3600 * 24);
-          if (days < 95) {
+          if (days <= 93) {
             realActiveBranches.push(branch);
             realActiveBranches.sort((a, b) => a.name.localeCompare(b.name));
             setFinalActiveBranches([...realActiveBranches]);
@@ -108,9 +108,10 @@ const Dashboard = () => {
       datasets: [
         {
           data: comparativeContributions,
-          backgroundColor: ["#00B6BD", "#BBFFF6"],
-          hoverBackgroundColor: ["#74C5F7", "#0CE0F5"],
-          borderColor: "#1B400F",
+          backgroundColor: ["#45ABDB", "#4674FF"],
+          //You may use user-defined hover background-color states as commented below
+          // hoverBackgroundColor: ["#327c7c", "#959e9e"],
+          borderColor: "#fff",
           borderWidth: 2,
         },
       ],
@@ -147,6 +148,8 @@ const Dashboard = () => {
     setAllBranches([]);
   }
   function getRepositories(event) {
+    setAllBranches([]);
+    setFinalActiveBranches([]);
     let name = event.target.value;
     axios({
       method: "get",
@@ -193,7 +196,7 @@ const Dashboard = () => {
   function renderCollaborators(collaborators) {
     return (
       <li className="list" key={collaborators.id}>
-        <p>|| {collaborators.login} ||</p>
+        <p><span className="text-white">||</span> {collaborators.login} <span className="text-white">||</span></p>
       </li>
     );
   }
@@ -212,7 +215,7 @@ const Dashboard = () => {
   function renderOpenPullRequests(openPulls) {
     return (
       <li className="list" key={openPulls.id}>
-        <p>|| {openPulls.title} ||</p>
+        <p><span className="text-white">||</span> {openPulls.title} <span className="text-white">||</span></p>
       </li>
     );
   }
@@ -220,7 +223,7 @@ const Dashboard = () => {
   function renderClosedPullRequests(closedPulls) {
     return (
       <li className="list" key={closedPulls.id}>
-        <p>|| {closedPulls.title} ||</p>
+        <p><span className="text-white">||</span> {closedPulls.title} <span className="text-white">||</span></p>
       </li>
     );
   }
@@ -228,7 +231,7 @@ const Dashboard = () => {
   function renderActiveBranches(activeBranches) {
     return (
       <li className="list" key={activeBranches.commit.url}>
-        <p>|| {activeBranches.name} ||</p>
+        <p><span className="text-white">||</span> {activeBranches.name} <span className="text-white">||</span></p>
       </li>
     );
   }
@@ -287,8 +290,9 @@ const Dashboard = () => {
       legend: {
         labels: {
           font: {
-            size: 14,
+            size: 15,
           },
+          color : '#fff',
         },
         display: true,
         position: "bottom",
@@ -297,9 +301,8 @@ const Dashboard = () => {
   };
 
   return (
-    <>
       <div id="dashboard">
-      <h1 className='text-primary mb-3'>Github Information Dashboard</h1>
+      <h1 id="dashboard-heading" className='mb-3'>Github Information Dashboard</h1>
 
         <div className="container mt-5">
           <input
@@ -366,16 +369,14 @@ const Dashboard = () => {
             </div>
           )}
         </div>
-      </div>
-
-      <Router>
-        <Link to="/auth">
+        <Router>
+        <Link to="/">
           <button className="button" id="logout" onClick={logoutUser}>
             Log out
           </button>
         </Link>
       </Router>
-    </>
+      </div>
   );
 };
 

@@ -1,105 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300;400;700;900&display=swap');
-*, *::before, *::after {
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sarabun:wght@800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Livvic:wght@300;400;700;900&display=swap");
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: inherit;
 }
 
-p{
-  font-family: 'Roboto Slab', serif;
+p {
+  font-family: "Roboto Slab", serif;
   font-size: 1rem;
-  color:#001FB8;
+  color: #001fb8;
 }
 
-*{
-    text-align: center;
+* {
+  text-align: center;
 }
 
 .error {
-background-color: tomato;
-color: white;
-border-radius: 6px;
-padding: 6px 12px;
-font-weight: bold;
-max-width: 400px;
-margin-bottom: 18px;
+  background-color: tomato;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  width: 20rem;
+  margin-top: -4.5rem;
+  margin-left: 25rem;
 }
-h1{
+h1 {
   margin-top: 0.5rem;
   margin-left: 4rem;
-  font-family: 'Livvic', sans-serif;
+  font-family: "Livvic", sans-serif;
   font-size: 2.5rem;
   text-align: left;
   color: #1efdfe;
 }
-.text-primary{
+#dashboard-heading {
   text-align: center;
-  font-family: 'Sarabun', sans-serif;
+  font-family: "Sarabun", sans-serif;
   margin: 0 auto;
+  font-size: 3rem;
 }
-#GitHub{
+h2 {
+  color: #ffffff;
+}
+#GitHub {
   font-size: 8rem;
   font-weight: 900;
 }
-#Information{
+#Information {
   font-weight: 700;
   color: white;
   margin-right: 0.7rem;
 }
-#h1Down{
-position: relative;
-top: -1.2rem;
+#h1Down {
+  position: relative;
+  top: -1.2rem;
 }
-#Dashboard{
-  font-weight: 400;
-}
-input {
-padding: 12px;
-margin: 12px;
-margin-left: 10px;
-border: 1px solid #ccc;
-box-shadow: 0 1px 4px #ccc;
-border-radius: 6px;
-font-size: 1.25rem;
-width: 100%;
-}
-.landing-page{
-  width: 100%;
-  min-height: 100vh;
-  background-image: url('./images/background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  overflow: hidden;
-}
-#githubDescription{
+#githubDescription {
   color: white;
   font-size: 1.4rem;
   position: relative;
   top: -2rem;
   left: -26rem;
-  font-family: 'Livvic', sans-serif;
+  font-family: "Livvic", sans-serif;
   font-weight: 300;
 }
-#secondP{
+#secondP {
   margin-left: 4rem;
 }
-#thirdP{
+#thirdP {
   margin-left: 1rem;
 }
-#login-button{
-position: relative;
-left: -27rem;
-top: -1rem;
+#login-button {
+  position: relative;
+  left: -27rem;
+  top: -1rem;
 }
-#login-button img{
+#login-button img {
   width: 15rem;
   transition: transform 1s;
 }
-#login-button span{
+#login-button span {
   position: relative;
   top: 0.5rem;
   font-size: 2.5rem;
@@ -108,124 +94,355 @@ top: -1rem;
   color: #0a0141;
 }
 
-a:hover, #login-button img:hover{
+a:hover,
+#login-button img:hover {
   transform: scale(1.04);
   text-decoration: none;
 }
-.container {
-box-shadow: 0 1px 6px rgb(2, 13, 78);
-border-radius: 6px;
-display: flex;
-height: auto;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-width: 400px;
-padding: 22px;
-margin-bottom: 50px;
+@media(max-width:1300px){
+  #main-heading{
+    position: relative;
+    left:3rem;
+  }
+  #githubDescription{
+    position: relative;
+    left:-20rem;
+  }
+#login-button{
+  position: relative;
+left: -21rem;
+}
 }
 
-@media (max-width: 450px){
-  .container{
+@media(max-width:1200px){
+  #main-heading{
+    position: relative;
+    left:4rem;
+  }
+  #githubDescription{
+    position: relative;
+    left:-15rem;
+  }
+#login-button{
+  position: relative;
+left: -16rem;
+}
+}
+
+@media(max-width:1100px){
+  #main-heading{
+    position: relative;
+    left:4rem;
+  }
+  #githubDescription{
+    position: relative;
+    left:-10rem;
+  }
+#login-button{
+  position: relative;
+left: -12rem;
+}
+}
+
+@media(max-width:950px){
+  #main-heading{
+    position: relative;
+    left:4rem;
+  }
+  #githubDescription{
+    position: relative;
+    left:-6rem;
+  }
+#login-button{
+  position: relative;
+left: -7rem;
+}
+.error {
+  position: relative;
+  top: 5rem;
+  right: 15rem;
+}
+}
+
+@media(max-width:850px){
+  #main-heading{
+    position: relative;
+    left:4rem;
+  }
+  #githubDescription{
+    position: relative;
+    left:-3rem;
+  }
+#login-button{
+  position: relative;
+left: -4rem;
+}
+}
+
+@media(max-width:750px){
+  #main-heading{
+     margin-left: 1.8rem;
+  }
+  #githubDescription{
+    position: relative;
+    left:-3rem;
+  }
+#login-button{
+  position: relative;
+  left: -3rem;
+}
+}
+
+@media(max-width:550px){
+
+#main-heading{
+margin-left: -2rem;
+}
+#GitHub {
+  font-size: 5rem;
+}
+#githubDescription{
+  width: 34rem;
+}
+#login-button img{
+width: 12rem;
+}
+#login-button span{
+  font-size: 2.07rem;
+  left: -9.6rem;
+  }
+  .error {
+    right: 23rem;
+  }
+}
+
+@media(max-width:480px){
+  #main-heading{
+  margin-left: -2rem;
+  }
+  #GitHub {
+    font-size: 3.5rem;
+  }
+  #h1Down{
+    font-size: 2rem;
+  }
+  #githubDescription{
+    width: 30rem;
+    left: -1.7rem;
+  }
+  }
+
+  @media(max-width:440px){
+    #main-heading{
+    margin-left: -2rem;
+    }
+    #GitHub {
+      font-size: 3.2rem;
+    }
+    #h1Down{
+      font-size: 1.8rem;
+    }
+    #githubDescription{
+      width: 27rem;
+      left: -1rem;
+    }
+    #secondP{
+      position: relative;
+      left: -6rem;
+    }
+    .error {
+ right: 23.5rem;
+    }
+    }
+
+    @media(max-width:390px){
+      #main-heading{
+      margin-left: -2rem;
+      }
+      #GitHub {
+        font-size: 3.2rem;
+        position: relative;
+        left: 3.4rem;
+      }
+      #h1Down{
+        font-size: 1.7rem;
+      }
+      #githubDescription{
+        width: 22rem;
+        left: -1rem;
+      }
+      #secondP{
+        position: relative;
+        left: -2.7rem;
+      }
+      #login-button{
+        left: 2rem;
+      }
+      .error {
+        right: 24.5rem;
+           }
+      }
+
+#Dashboard {
+  font-weight: 400;
+}
+#dashboard {
+  background: rgb(2, 0, 36);
+  background: radial-gradient(
+    circle,
+    rgba(2, 0, 36, 1) 16%,
+    rgba(2, 0, 36, 1) 39%,
+    rgba(5, 34, 72, 1) 49%,
+    rgba(8, 72, 111, 1) 63%,
+    rgba(9, 9, 121, 1) 75%,
+    rgba(5, 107, 186, 1) 82%,
+    rgba(1, 196, 245, 1) 94%,
+    rgba(4, 127, 199, 1) 100%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100%;
+  height: auto;
+}
+input {
+  padding: 12px;
+  margin: 12px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 4px #ccc;
+  border-radius: 6px;
+  font-size: 1.25rem;
+  width: 100%;
+}
+.landing-page {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("./images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+.container {
+  box-shadow: 0 1px 6px rgb(126, 136, 131);
+  border-radius: 6px;
+  display: flex;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #bcd5e4;
+  width: 400px;
+  padding: 22px;
+  margin-bottom: 50px;
+}
+
+@media (max-width: 450px) {
+  .container {
     width: 320px;
   }
 }
 
 .button {
-background-color: teal;
-border: none;
-color: white;
-padding: 12px;
-margin: 12px 0;
-box-shadow: 0 1px 6px rgb(221, 221, 221);
-width: 100%;
-border-radius: 6px;
-font-size: 1.25rem;
+  background-color: teal;
+  border: none;
+  color: white;
+  padding: 12px;
+  margin: 12px 0;
+  box-shadow: 0 1px 6px rgb(221, 221, 221);
+  width: 100%;
+  border-radius: 6px;
+  font-size: 1.35rem;
 }
 
-button:hover{
-  background-color: rgba(0, 128, 128, 0.739);
+button:hover {
+  background-color: rgb(3, 93, 93);
 }
 
 .App {
-display: flex;
-align-items: center;
-justify-content: center;
-min-height: 100vh;
-flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .results-container {
-margin-top: 10px;
-height: auto;
-width: 100%;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
+  margin-top: 10px;
+  height: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.organization-name{
-color:#0B070A;
-font-size: 1.3rem;
-background-color: #2DABFA;
-width: auto;
-height: 4rem;
-margin: 5px auto;
+.organization-name {
+  color: #000;
+  font-size: 1.3rem;
+  background-color: #2dabfa;
+  min-width: 7.5rem;
+  height: 4rem;
+  margin: 5px auto;
 }
-.repository-name{
-  color: #1B400F;
+.repository-name {
+  color: #000000;
   background-color: #bcd5e4;
+  min-width: 7.5rem;
   font-size: 1.3rem;
   margin: 5px auto;
 }
-.organization-name:hover{
-  background-color: #4ee4ff;
+.organization-name:hover {
+  background-color: #00ccff;
 }
-.repository-name:hover{
-  background-color: #d1e7de;
+.repository-name:hover {
+  background-color: #fff;
 }
-.list-organization, .list-repositories{
-list-style: none;
-display: inline-block;
-margin-right: 10px;
-margin-left: 10px;
-}
-
-.list{
+.list-organization,
+.list-repositories {
   list-style: none;
-display: inline-block;
-align-content: flex-start;
-justify-content: flex-start;
-align-items: flex-start;
-margin-right: 1rem;
-margin-left: 1rem;
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
-.list p{
-  font-size: 1.15rem;
+.list {
+  list-style: none;
+  display: inline-block;
+  align-content: flex-start;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
-.results-container ul{
+.list p {
+  font-size: 1.17rem;
+  color: #1efdfe;
+}
+
+.results-container ul {
   max-width: 900px;
 }
 
-#logout{
-  min-width: 200px;
+#logout {
+  width: 200px;
 }
-#pie-chart{
+#pie-chart {
   max-width: 320px;
   max-height: 320px;
   margin: 0 auto;
 }
-.page-item{
+.page-item {
   margin: 0 auto;
 }
-a.page-link{
-margin: 0 auto;
+a.page-link {
+  margin: 0 auto;
 }
 
-ul.pagination{
+ul.pagination {
   max-width: 350px;
   margin: 0 auto;
   margin-bottom: 20px;
