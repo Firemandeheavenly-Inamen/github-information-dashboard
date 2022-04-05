@@ -304,7 +304,7 @@ width: 12rem;
   background-position: center;
   background-attachment: fixed;
   width: 100%;
-  height: auto;
+  min-height: 100vh;
 }
 input {
   padding: 12px;

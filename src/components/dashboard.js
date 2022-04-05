@@ -8,7 +8,7 @@ import PieChart from "./PieChart";
 
 const Dashboard = () => {
   const [repositories, setRepositories] = useState([]);
-  const { user, logoutUser } = useUserContext();
+  const { user, logoutUser, error, setError } = useUserContext();
   const [username, setUsername] = useState(user.reloadUserInfo.screenName);
   const [loading, setLoading] = useState(false);
   const [organizations, setOrganizations] = useState([]);
@@ -75,9 +75,15 @@ const Dashboard = () => {
     axios({
       method: "get",
       url: `https://api.github.com/users/${username}/orgs`,
-    }).then((res) => {
-      setOrganizations(res.data);
-    });
+    })
+      .then((res) => {
+        setOrganizations(res.data);
+      })
+      .catch((err) => {
+        setOrganizations([]);
+        setLoading(false);
+        setError("Sorry, we could not find any data");
+      });
   }, []);
 
   useEffect(() => {
@@ -127,6 +133,7 @@ const Dashboard = () => {
   }
 
   function searchOrganizations() {
+    setOrganizations([]);
     setAllBranches([]);
     setFinalActiveBranches([]);
     setLoading(true);
@@ -136,16 +143,17 @@ const Dashboard = () => {
     })
       .then((res) => {
         setLoading(false);
+        setError(null);
         setOrganizations(res.data);
       })
       .catch((err) => {
+        setOrganizations([]);
+        console.log(organizations);
         setLoading(false);
+          setError("Sorry, we could not find any data");
       });
     setRepositories([]);
-    setCollaborators([]);
-    setOpenPullRequests([]);
-    setClosedPullRequests([]);
-    setAllBranches([]);
+    clearRepositoryFields();
   }
   function getRepositories(event) {
     setAllBranches([]);
@@ -196,7 +204,10 @@ const Dashboard = () => {
   function renderCollaborators(collaborators) {
     return (
       <li className="list" key={collaborators.id}>
-        <p><span className="text-white">||</span> {collaborators.login} <span className="text-white">||</span></p>
+        <p>
+          <span className="text-white">||</span> {collaborators.login}{" "}
+          <span className="text-white">||</span>
+        </p>
       </li>
     );
   }
@@ -215,7 +226,10 @@ const Dashboard = () => {
   function renderOpenPullRequests(openPulls) {
     return (
       <li className="list" key={openPulls.id}>
-        <p><span className="text-white">||</span> {openPulls.title} <span className="text-white">||</span></p>
+        <p>
+          <span className="text-white">||</span> {openPulls.title}{" "}
+          <span className="text-white">||</span>
+        </p>
       </li>
     );
   }
@@ -223,7 +237,10 @@ const Dashboard = () => {
   function renderClosedPullRequests(closedPulls) {
     return (
       <li className="list" key={closedPulls.id}>
-        <p><span className="text-white">||</span> {closedPulls.title} <span className="text-white">||</span></p>
+        <p>
+          <span className="text-white">||</span> {closedPulls.title}{" "}
+          <span className="text-white">||</span>
+        </p>
       </li>
     );
   }
@@ -231,7 +248,10 @@ const Dashboard = () => {
   function renderActiveBranches(activeBranches) {
     return (
       <li className="list" key={activeBranches.commit.url}>
-        <p><span className="text-white">||</span> {activeBranches.name} <span className="text-white">||</span></p>
+        <p>
+          <span className="text-white">||</span> {activeBranches.name}{" "}
+          <span className="text-white">||</span>
+        </p>
       </li>
     );
   }
@@ -292,7 +312,7 @@ const Dashboard = () => {
           font: {
             size: 15,
           },
-          color : '#fff',
+          color: "#fff",
         },
         display: true,
         position: "bottom",
@@ -301,82 +321,97 @@ const Dashboard = () => {
   };
 
   return (
-      <div id="dashboard">
-      <h1 id="dashboard-heading" className='mb-3'>Github Information Dashboard</h1>
+    <div id="dashboard">
+      <h1 id="dashboard-heading" className="mb-3">
+        Github Information Dashboard
+      </h1>
 
-        <div className="container mt-5">
-          <input
-            className="input"
-            value={username}
-            placeholder="Github Username"
-            onChange={(e) => setUsername(e.target.value)}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                searchOrganizations();
-              }
-            }}
-          />
-          <button className="button" onClick={handleSubmit}>
-            {loading ? "Searching..." : "Search"}
-          </button>
-        </div>
-
-        <div className="results-container">
-          <h2>Organizations</h2>
-          <ul>{currentPosts.map(renderOrganization)}</ul>
-        </div>
-
-        <Pagination
-          postsPerPage={postsPerPage}
-          totalPosts={organizations.length}
-          paginate={paginate}
+      <div className="container mt-5">
+        <input
+          className="input"
+          value={username}
+          placeholder="Github Username"
+          onChange={(e) => setUsername(e.target.value)}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              searchOrganizations();
+            }
+          }}
         />
-        <div className="results-container">
-          <h2>Repositories</h2>
-          <ul>{currentRepositoryPosts.map(renderRepositories)}</ul>
-        </div>
-        <Pagination
-          postsPerPage={postsPerRepositoryPage}
-          totalPosts={repositories.length}
-          paginate={paginateRepositories}
-        />
+        <button className="button" onClick={handleSubmit}>
+          {loading ? "Searching..." : "Search"}
+        </button>
+      </div>
+      {error && (
+        <p
+          style={{
+            color: "red",
+            opacity: "0.8",
+            marginBottom: "-30px",
+            fontSize: "1.2rem",
+            position: "relative",
+            top: "-80px",
+          }}
+        >
+          {error}
+        </p>
+      )}
+      <div className="results-container">
+        <h2>Organizations</h2>
+        <ul>{currentPosts.map(renderOrganization)}</ul>
+      </div>
 
-        <div className="results-container">
-          <h2>Collaborators</h2>
-          <ul>{collaborators.map(renderCollaborators)}</ul>
-        </div>
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={organizations.length}
+        paginate={paginate}
+      />
+      <div className="results-container">
+        <h2>Repositories</h2>
+        <ul>{currentRepositoryPosts.map(renderRepositories)}</ul>
+      </div>
+      <Pagination
+        postsPerPage={postsPerRepositoryPage}
+        totalPosts={repositories.length}
+        paginate={paginateRepositories}
+      />
 
-        <div className="results-container">
-          <h2>Active Branches</h2>
-          <ul>{finalActiveBranches.map(renderActiveBranches)}</ul>
-        </div>
+      <div className="results-container">
+        <h2>Collaborators</h2>
+        <ul>{collaborators.map(renderCollaborators)}</ul>
+      </div>
 
-        <div className="results-container">
-          <h2>Open Pull Requests</h2>
-          <ul>{openPullRequests.map(renderOpenPullRequests)}</ul>
-        </div>
+      <div className="results-container">
+        <h2>Active Branches</h2>
+        <ul>{finalActiveBranches.map(renderActiveBranches)}</ul>
+      </div>
 
-        <div className="results-container">
-          <h2>Closed Pull Requests</h2>
-          <ul>{closedPullRequests.map(renderClosedPullRequests)}</ul>
-        </div>
+      <div className="results-container">
+        <h2>Open Pull Requests</h2>
+        <ul>{openPullRequests.map(renderOpenPullRequests)}</ul>
+      </div>
 
-        <div className="results-container">
-          <h2>Comparison Chart</h2>
-          {collaborators.length > 0 && (
-            <div id="pie-chart">
-              <PieChart chartData={userData} chartOptions={options} />
-            </div>
-          )}
-        </div>
-        <Router>
+      <div className="results-container">
+        <h2>Closed Pull Requests</h2>
+        <ul>{closedPullRequests.map(renderClosedPullRequests)}</ul>
+      </div>
+
+      <div className="results-container">
+        <h2>Comparison Chart</h2>
+        {collaborators.length > 0 && (
+          <div id="pie-chart">
+            <PieChart chartData={userData} chartOptions={options} />
+          </div>
+        )}
+      </div>
+      <Router>
         <Link to="/">
           <button className="button" id="logout" onClick={logoutUser}>
             Log out
           </button>
         </Link>
       </Router>
-      </div>
+    </div>
   );
 };
 
