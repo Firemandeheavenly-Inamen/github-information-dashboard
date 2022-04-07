@@ -36,6 +36,12 @@ const Dashboard = () => {
   let contributors = [];
   let contributions = [];
 
+  useEffect(()=>{
+    setOrganizations([])
+    setRepositories([])
+    clearRepositoryFields()
+  },[username])
+
   useEffect(() => {
     if (allBranches.length > 0) {
       allBranches.forEach((branch) => {
@@ -92,6 +98,7 @@ const Dashboard = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
+    setError(null)
     searchOrganizations();
   }
 
@@ -133,7 +140,7 @@ const Dashboard = () => {
   }
 
   function searchOrganizations() {
-    setOrganizations([]);
+    setError(null);
     setAllBranches([]);
     setFinalActiveBranches([]);
     setLoading(true);
@@ -145,10 +152,10 @@ const Dashboard = () => {
         setLoading(false);
         setError(null);
         setOrganizations(res.data);
-      })
+        res.data.length===0 && setError("Sorry, we could not find any data")
+          })
       .catch((err) => {
         setOrganizations([]);
-        console.log(organizations);
         setLoading(false);
           setError("Sorry, we could not find any data");
       });
